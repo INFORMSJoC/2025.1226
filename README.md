@@ -44,8 +44,8 @@ Below is the BibTex for citing this snapshot of the repository.
 The goal of this software is to approximate second-stage value functions in
 two-stage stochastic programming using a graph encoder and a Transformer decoder.
 The software includes data generation, model training, and solution evaluation
-for capacitated facility location (CFLP), stochastic server location (SSLP), and
-stochastic multidimensional knapsack (SMKP) problems.
+for stochastic multidimensional knapsack (SMKP), stochastic server location (SSLP),
+and capacitated facility location (CFLP) problems.
 
 The source code is organized into `bdd/` for optimization models, `dl/` for the
 Tran2SP model, `env/` for problem configurations and base data, `scripts/` for
@@ -82,7 +82,7 @@ python -m pip install gurobipy==12.0.2 numpy==2.1.3 scipy==1.15.2 pandas==2.2.3 
 
 ## Replicating
 
-To replicate the data-generation, model-training, and evaluation workflow, execute the following commands from the repository root using Bash. Be sure to generate the training data before the test data, since test normalization uses statistics from the corresponding training dataset. The commands in steps 1 and 2 use the script's default seed (`0`).
+To replicate the data-generation, model-training, and evaluation workflow, execute the following commands from the repository root using Bash. Be sure to generate the training data before the test data, since test normalization uses statistics from the corresponding training dataset. Step 1 uses seed 7 and step 2 uses seed 777.
 
 ### 1. Generate training data
 
@@ -101,7 +101,7 @@ for instance in 25 50; do
   python -m scripts.run_2SP \
     --prob SMKP --instance "$instance" --max_n_scenarios 20 \
     --test_data False --except_outliers True --sl 6 \
-    --save_mode True --num_samples 5000
+    --save_mode True --num_samples 5000 --seed 7
 done
 ```
 
@@ -112,7 +112,7 @@ for instance in 5_25 10_50 15_45; do
   python -m scripts.run_2SP \
     --prob SSLP --instance "$instance" --max_n_scenarios 50 \
     --test_data False --except_outliers True --sl 4 \
-    --save_mode True --num_samples 5000
+    --save_mode True --num_samples 5000 --seed 7
 done
 ```
 
@@ -123,7 +123,7 @@ for instance in 10_10 15_15 25_25; do
   python -m scripts.run_2SP \
     --prob CFLP --instance "$instance" --max_n_scenarios 50 \
     --test_data False --except_outliers True --sl 3 \
-    --save_mode True --num_samples 5000
+    --save_mode True --num_samples 5000 --seed 7
 done
 ```
 
@@ -146,7 +146,7 @@ for instance in 25 50; do
       python -m scripts.run_2SP \
         --prob SMKP --instance "$instance" --test_n_scenarios "$n_scenarios" \
         --test_data True --except_outliers True --sl "$sl" \
-        --save_mode True --num_samples 50
+        --save_mode True --num_samples 50 --seed 777
     done
   done
 done
@@ -161,7 +161,7 @@ for instance in 5_25 10_50 15_45; do
       python -m scripts.run_2SP \
         --prob SSLP --instance "$instance" --test_n_scenarios "$n_scenarios" \
         --test_data True --except_outliers True --sl "$sl" \
-        --save_mode True --num_samples 50
+        --save_mode True --num_samples 50 --seed 777
     done
   done
 done
@@ -176,7 +176,7 @@ for instance in 10_10 15_15 25_25; do
       python -m scripts.run_2SP \
         --prob CFLP --instance "$instance" --test_n_scenarios "$n_scenarios" \
         --test_data True --except_outliers True --sl "$sl" \
-        --save_mode True --num_samples 50
+        --save_mode True --num_samples 50 --seed 777
     done
   done
 done
