@@ -91,8 +91,9 @@ To generate the training data, execute the following commands for each problem. 
 | Problem | Instances | Maximum scenarios | Stochastic level<br>(`--sl`) | Samples per configuration |
 | --- | --- | --- | --- | --- |
 | SMKP | `25`, `50` | 20 | 6 | 5,000 |
-| SSLP | `5_25`, `10_50`, `15_45` | 50 | 4 | 5,000 |
-| CFLP | `10_10`, `15_15`, `25_25` | 50 | 3 | 5,000 |
+| SSLP | `5_25`, `10_50` | 100 | 4 | 5,000 |
+| SSLP | `15_45` | 10 | 4 | 5,000 |
+| CFLP | `10_10`, `15_15`, `25_25` | 100 | 3 | 5,000 |
 
 **SMKP**
 
@@ -109,8 +110,12 @@ done
 
 ```bash
 for instance in 5_25 10_50 15_45; do
+  case "$instance" in
+    15_45) max_scenarios=10 ;;
+    *)     max_scenarios=100 ;;
+  esac
   python -m scripts.run_2SP \
-    --prob SSLP --instance "$instance" --max_n_scenarios 50 \
+    --prob SSLP --instance "$instance" --max_n_scenarios "$max_scenarios" \
     --test_data False --except_outliers True --sl 4 \
     --save_mode True --num_samples 5000 --seed 7
 done
@@ -121,7 +126,7 @@ done
 ```bash
 for instance in 10_10 15_15 25_25; do
   python -m scripts.run_2SP \
-    --prob CFLP --instance "$instance" --max_n_scenarios 50 \
+    --prob CFLP --instance "$instance" --max_n_scenarios 100 \
     --test_data False --except_outliers True --sl 3 \
     --save_mode True --num_samples 5000 --seed 7
 done
@@ -134,7 +139,8 @@ To generate the test data, execute the following commands. They generate 50 samp
 | Problem | Instances | Test scenarios | Stochastic levels<br>(`--sl`) | Samples per combination |
 | --- | --- | --- | --- | --- |
 | SMKP | `25`, `50` | 10, 20, 50 | 0–6 | 50 |
-| SSLP | `5_25`, `10_50`, `15_45` | 50, 100, 500 | 0–4 | 50 |
+| SSLP | `5_25`, `10_50` | 50, 100, 500 | 0–4 | 50 |
+| SSLP | `15_45` | 5, 10, 15 | 0–4 | 50 |
 | CFLP | `10_10`, `15_15`, `25_25` | 50, 100, 500 | 0–3 | 50 |
 
 **SMKP**
@@ -156,7 +162,11 @@ done
 
 ```bash
 for instance in 5_25 10_50 15_45; do
-  for n_scenarios in 50 100 500; do
+  case "$instance" in
+    15_45) scenarios="5 10 15" ;;
+    *)     scenarios="50 100 500" ;;
+  esac
+  for n_scenarios in $scenarios; do
     for sl in 0 1 2 3 4; do
       python -m scripts.run_2SP \
         --prob SSLP --instance "$instance" --test_n_scenarios "$n_scenarios" \
@@ -229,7 +239,11 @@ for problem in SMKP SSLP CFLP; do
     CFLP) instances="10_10 15_15 25_25"; scenarios="50 100 500"; levels="0 1 2 3" ;;
   esac
   for instance in $instances; do
-    for n_scenarios in $scenarios; do
+    case "$instance" in
+      15_45) inst_scenarios="5 10 15" ;;
+      *)     inst_scenarios="$scenarios" ;;
+    esac
+    for n_scenarios in $inst_scenarios; do
       for sl in $levels; do
         python -m scripts.run_inference \
           --prob "$problem" --instance "$instance" \
