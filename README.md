@@ -55,12 +55,12 @@ The graph encoder in `dl/diffpool/` is adapted from the DiffPool example in
 
 ## Building
 
-The software was developed using Python 3.12.2 with the following package versions.
+The software was developed using Python 3.12 with the following package versions.
 The PyTorch and DGL builds used here were compiled against CUDA 12.4.
 
 | Package | Version |
 | --- | --- |
-| PyTorch | 2.4.1 |
+| PyTorch | 2.4.0 |
 | DGL | 2.4.0 |
 | Gurobi (gurobipy) | 12.0.2 |
 | NumPy | 2.1.3 |
@@ -73,7 +73,7 @@ The PyTorch and DGL builds used here were compiled against CUDA 12.4.
 A working Gurobi license is required.
 
 To install the dependencies, first install
-[PyTorch 2.4.1](https://pytorch.org/get-started/previous-versions/) and a compatible
+[PyTorch 2.4.0](https://pytorch.org/get-started/previous-versions/) and a compatible
 [DGL build](https://www.dgl.ai/pages/start.html), then execute the following command.
 
 ```bash
@@ -88,7 +88,7 @@ To replicate the data-generation, model-training, and evaluation workflow, execu
 
 To generate the training data, execute the following commands for each problem. Each configuration contains 5,000 samples before outlier filtering, with the scenario count sampled from 1 through `--max_n_scenarios`, inclusive.
 
-| Problem | Instances | Maximum scenarios | Stochastic level (`--sl`) | Samples per configuration |
+| Problem | Instances | Maximum scenarios | Stochastic level<br>(`--sl`) | Samples per configuration |
 | --- | --- | --- | --- | --- |
 | SMKP | `25`, `50` | 20 | 6 | 5,000 |
 | SSLP | `5_25`, `10_50`, `15_45` | 50 | 4 | 5,000 |
@@ -131,7 +131,7 @@ done
 
 To generate the test data, execute the following commands. They generate 50 samples for every combination of problem instance, scenario count, and stochastic level listed below, before outlier filtering. Each sample uses exactly `--test_n_scenarios` scenarios.
 
-| Problem | Instances | Test scenarios | Stochastic levels (`--sl`) | Samples per combination |
+| Problem | Instances | Test scenarios | Stochastic levels<br>(`--sl`) | Samples per combination |
 | --- | --- | --- | --- | --- |
 | SMKP | `25`, `50` | 10, 20, 50 | 0–6 | 50 |
 | SSLP | `5_25`, `10_50`, `15_45` | 50, 100, 500 | 0–4 | 50 |
